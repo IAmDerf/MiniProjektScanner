@@ -10,6 +10,22 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 
 public class FileScanner {
+	static String[] meget = {"hella","huita","über","extremo","mega"};
+	
+	public static String findAndReplace (String s, String a, String[] k) {
+		if(s.contains(a)) {
+			String[] b = s.split(" ");
+			s="";
+			for (int j = 0; j < b.length; j++) {
+				if(b[j].length()>=a.length())
+					if(b[j].substring(0,a.length()).equals(a)) {
+						b[j] = k[(int) (Math.random() * k.length)];
+					}
+				s=s+b[j]+" ";
+				}
+		}
+		return s;
+	}
 	public static String format(String s) {
 		String[] a = s.split("(?<=\\.)");
 		String output="";
@@ -17,8 +33,9 @@ public class FileScanner {
 			 if(a[i].charAt(0)==' ') {
 				a[i]=a[i].substring(1)+"\n";
 			}
-			a[i].split("([a-z]<=[A-Z])");
-						
+			findAndReplace(a[i],"meget", meget);
+				
+			
 			
 			output= output + a[i] + "\n";
 			 
@@ -61,7 +78,7 @@ public class FileScanner {
 	public static void main(String[] args) {
 		String input = readFromFile("UglyDuckling");
 		System.out.println(format(input));
-		writeToFile(format(input),"UglyDuckling");
+		//writeToFile(format(input),"UglyDuckling");
 		
 
 	}
