@@ -11,20 +11,38 @@ import java.io.Writer;
 
 public class FileScanner {
 	static String[] meget = {"hella","huita","über","extremo","mega"};
+	static String[] rap = {"Bing", "Bong", "Skrrrt","skippity","pop pop","boom"};
 	
-	public static String findAndReplace (String s, String a, String[] k) {
-		if(s.contains(a)) {
-			String[] b = s.split(" ");
-			s="";
+	public static String findAndReplace (String a, String s, String[] k) {
+		if(a.toLowerCase().contains(s)) {
+			String[] b = a.split(" ");
+			a="";
+			String start = "";
+			String slut = "";
 			for (int j = 0; j < b.length; j++) {
-				if(b[j].length()>=a.length())
-					if(b[j].substring(0,a.length()).equals(a)) {
-						b[j] = k[(int) (Math.random() * k.length)];
+				start="";
+				slut="";
+					if(b[j].toLowerCase().contains(s)) {
+						if(b[j].charAt(0)=='\"') {
+							start="\"";
+						}
+						if(b[j].charAt(b[j].length()-1)=='\"') {
+							slut="\"";
+						}
+						for (int i = 0; i < b[j].length(); i++) {
+							if(b[j].toLowerCase().charAt(i)==s.charAt(0)) {
+								b[j]=b[j].substring(i,s.length()+i);
+							}
+						}
+						
+						if(b[j].toLowerCase().equals(s)) {
+							b[j] = start+k[(int) (Math.random() * k.length)]+slut;
+						}
 					}
-				s=s+b[j]+" ";
-				}
+				a+=b[j]+" ";
+			}
 		}
-		return s;
+		return a;
 	}
 	public static String format(String s) {
 		String[] a = s.split("(?<=\\.)");
@@ -33,11 +51,12 @@ public class FileScanner {
 			 if(a[i].charAt(0)==' ') {
 				a[i]=a[i].substring(1)+"\n";
 			}
-			findAndReplace(a[i],"meget", meget);
+			a[i]=findAndReplace(a[i],"meget", meget);
+			a[i]=findAndReplace(a[i],"rap",rap);
 				
 			
 			
-			output= output + a[i] + "\n";
+			output += a[i] + "\n";
 			 
 
 		}
@@ -78,7 +97,7 @@ public class FileScanner {
 	public static void main(String[] args) {
 		String input = readFromFile("UglyDuckling");
 		System.out.println(format(input));
-		//writeToFile(format(input),"UglyDuckling");
+		writeToFile(format(input),"UglyDuckling");
 		
 
 	}
