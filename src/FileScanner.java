@@ -20,20 +20,27 @@ public class FileScanner {
 			a="";
 			String start = "";
 			String slut = "";
+			int sluttal = 1;
+			int starttal = 0;
 			for (int j = 0; j < b.length; j++) {
 				start="";
 				slut="";
+				sluttal=1;
+				starttal=0;
 					if(b[j].toLowerCase().contains(s)) {
-						if(b[j].charAt(0)=='\"') {
-							start="\"";
-						}
-						while (!(b[j].toLowerCase().charAt(b[j].length()-1)==s.charAt(s.length()-1))) {
+						while (!(b[j].toLowerCase().charAt(starttal)==s.charAt(0))) {
 							
+							start=b[j].substring(0,starttal+1);
+							starttal++;
+						}
+						while (!(b[j].toLowerCase().charAt(b[j].length()-sluttal)==s.charAt(s.length()-1))) {
+							
+							slut=b[j].substring((b[j].length()-sluttal));
+							sluttal++;
 						}
 								
-				
-							slut=b[j].substring((b[j].length()-1),b[j].length());
-						}
+							
+						
 						for (int i = 0; i < b[j].length(); i++) {
 							if(b[j].toLowerCase().charAt(i)==s.charAt(0)) {
 								b[j]=b[j].substring(i,s.length()+i);
