@@ -13,6 +13,7 @@ public class FileScanner {
 	static String[] meget = {"hella","huita","über","extremo","mega"};
 	static String[] rap = {"Bing", "Bong", "Skrrrt","skippity","pop pop","boom"};
 	
+	
 	public static String findAndReplace (String a, String s, String[] k) {
 		if(a.toLowerCase().contains(s)) {
 			String[] b = a.split(" ");
@@ -26,8 +27,12 @@ public class FileScanner {
 						if(b[j].charAt(0)=='\"') {
 							start="\"";
 						}
-						if(b[j].charAt(b[j].length()-1)=='\"') {
-							slut="\"";
+						while (!(b[j].toLowerCase().charAt(b[j].length()-1)==s.charAt(s.length()-1))) {
+							
+						}
+								
+				
+							slut=b[j].substring((b[j].length()-1),b[j].length());
 						}
 						for (int i = 0; i < b[j].length(); i++) {
 							if(b[j].toLowerCase().charAt(i)==s.charAt(0)) {
