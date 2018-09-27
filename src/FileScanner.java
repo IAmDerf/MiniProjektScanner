@@ -8,6 +8,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
 import java.io.Writer;
+import java.util.*;
+
 
 public class FileScanner {
 	static String[] meget = {"hella","huita","über","extremo","mega"};
@@ -92,11 +94,38 @@ public class FileScanner {
 		return file;
 		
 	}
-
+	
+	public static void zipf (String s) {
+		String[] sArr = s.split(" ");
+		ArrayList<ordTæller> aList = new ArrayList<ordTæller>();
+	
+			for (int i = 0; i < sArr.length; i++) {
+				sArr[i]=sArr[i].toLowerCase();
+		if (i==0) {
+			aList.add(new ordTæller(("\\b[sArr[i]]\\b"),1));
+			System.out.println(aList.get(0).getWord());
+		} else {
+			for (int j = 0; j < aList.size(); j++) {
+				if(aList.get(j).getWord().matches("(\\b)"+sArr[i]+"(\\b)")) {
+					aList.get(j).setValues(aList.get(j).getWord(), aList.get(j).getOccurence()+1);
+				}
+				else {
+					aList.add(new ordTæller(sArr[i],1));
+					
+				}
+			
+			}
+		}
+			}
+			for (ordTæller ordTæller : aList) {
+				System.out.println(ordTæller.getWord() + "Er set i teksten: " + ordTæller.getOccurence() + " gange");
+				
+			}
+	}
 	public static void writeToFile(String s, String a) {
 
 		try {
-			Writer writer = new OutputStreamWriter(new FileOutputStream("TheEnhanced" + a + ".rtf"), "UTF-16");
+			Writer writer = new OutputStreamWriter(new FileOutputStream("TheEnhanced" + a + ".rtf"), "UTF-8");
 			BufferedWriter fout = new BufferedWriter(writer);
 			fout.write(s);
 			fout.newLine();
@@ -110,7 +139,7 @@ public class FileScanner {
 		String input = readFromFile("UglyDuckling");
 		System.out.println(format(input));
 		writeToFile(format(input),"UglyDuckling");
-		
+		zipf(input);
 
 	}
 }
