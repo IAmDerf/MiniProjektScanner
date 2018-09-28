@@ -97,25 +97,41 @@ public class FileScanner {
 	
 	public static void zipf (String s) {
 		String[] sArr = s.split(" ");
+		int start = 0;
+		int slut = 0;
 		ArrayList<ordTæller> aList = new ArrayList<ordTæller>();
 	
 			for (int i = 0; i < sArr.length; i++) {
-				sArr[i]=sArr[i].toLowerCase();
+					start=0;
+					slut=0;
+					sArr[i]=sArr[i].toLowerCase();
+					if(sArr[i].contains("\\pl")) {
+					while(!(sArr[i].substring(start, start+1).matches("\\pL"))) {
+						start++;
+					}
+					while(!(sArr[i].substring(sArr[i].length()-slut-1, sArr[i].length()-slut).matches("\\pL"))) {
+						slut++;
+					}
+					sArr[i]=sArr[i].substring(start, sArr[i].length()-slut);
+					}
+				System.out.println(sArr[i]);
 		if (i==0) {
-			aList.add(new ordTæller(("\\b[sArr[i]]\\b"),1));
+			aList.add(new ordTæller((sArr[i]),1));
 			System.out.println(aList.get(0).getWord());
 		} else {
 			for (int j = 0; j < aList.size(); j++) {
-				if(aList.get(j).getWord().matches("(\\b)"+sArr[i]+"(\\b)")) {
+				if(aList.get(j).getWord().matches(sArr[i])) {
 					aList.get(j).setValues(aList.get(j).getWord(), aList.get(j).getOccurence()+1);
 				}
 				else {
 					aList.add(new ordTæller(sArr[i],1));
 					
 				}
+				
 			
 			}
 		}
+		
 			}
 			for (ordTæller ordTæller : aList) {
 				System.out.println(ordTæller.getWord() + "Er set i teksten: " + ordTæller.getOccurence() + " gange");
