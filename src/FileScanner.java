@@ -12,10 +12,7 @@ import java.util.*;
 
 
 public class FileScanner {
-	static String[] meget = {"hella","huita","über","extremo","mega"};
-	static String[] rap = {"Bing", "Bong", "Skrrrt","skippity","pop pop","boom"};
-	
-	
+		
 	public static String findAndReplace (String a, String s, String[] k) {
 		if(a.toLowerCase().contains(s)) {
 			String[] b = a.split(" ");
@@ -59,6 +56,9 @@ public class FileScanner {
 		return a;
 	}
 	public static String format(String s) {
+		String[] meget = {"hella","huita","über","extremo","mega"};
+		String[] rap = {"Bing", "Bong", "Skrrrt","skippity","pop pop","boom"};
+		
 		String[] a = s.split("(?<=\\.)");
 		String output="";
 		for (int i = 0; i < a.length-1; i++) {
@@ -96,52 +96,70 @@ public class FileScanner {
 	}
 	
 	public static void zipf (String s) {
-		String[] sArr = s.split(" ");
-		int start = 0;
-		int slut = 0;
+		String[] sArr = s.split("\\b");
 		ArrayList<ordTæller> aList = new ArrayList<ordTæller>();
-	
 			for (int i = 0; i < sArr.length; i++) {
-					start=0;
-					slut=0;
+				//Her gøres alle ord i sætningen til kun ordet, uden ekstra symboler
 					sArr[i]=sArr[i].toLowerCase();
-					if(sArr[i].contains("\\pl")) {
-					while(!(sArr[i].substring(start, start+1).matches("\\pL"))) {
-						start++;
-					}
-					while(!(sArr[i].substring(sArr[i].length()-slut-1, sArr[i].length()-slut).matches("\\pL"))) {
-						slut++;
-					}
-					sArr[i]=sArr[i].substring(start, sArr[i].length()-slut);
-					}
-				System.out.println(sArr[i]);
-		if (i==0) {
-			aList.add(new ordTæller((sArr[i]),1));
-			System.out.println(aList.get(0).getWord());
-		} else {
-			for (int j = 0; j < aList.size(); j++) {
-				if(aList.get(j).getWord().matches(sArr[i])) {
-					aList.get(j).setValues(aList.get(j).getWord(), aList.get(j).getOccurence()+1);
-				}
-				else {
-					aList.add(new ordTæller(sArr[i],1));
-					
-				}
+					if(sArr[i].matches("\\pL+")){			
+						if(aList.size()==0) {
+							aList.add(new ordTæller(sArr[i],1));
+						}
+						else if (aList.size()==1) {
+							if(sArr[i].equals(aList.get(0).getWord())) {
+								aList.get(0).setValues(aList.get(0).getWord(), aList.get(0).getOccurence()+1);
+							}
+							else {
+								aList.add(new ordTæller(sArr[i],1));
+							}
+						}
+						else {
+						//Her sammenlignes ordet med ord, der allerede har været nævnt tidligere, hvis ordet ikke findes skabes et nyt object
+						for (int j = 0; j < aList.size(); j++) {
+							if(aList.get(j).getWord().matches(sArr[i])) {
+								aList.get(j).setValues(aList.get(j).getWord(), aList.get(j).getOccurence()+1);
+								j=aList.size();
+							}
+						
+							else if(j==aList.size()-1) {
+								aList.add(new ordTæller(sArr[i],1));
+								j=aList.size();
+				
+							}
+						}
+							}
 				
 			
+						}
+					} 
+				// Her sorteres ordnene efter occurence, ved hjælp af sorterings metoden "bubblesort"
+			     ordTæller temp = new ordTæller("temp",0);  
+			     for(int i=0; i < aList.size(); i++){  
+			    	 for(int j=1; j < (aList.size()-i); j++){  
+			    		 if(aList.get(j-1).getOccurence() < aList.get(j).getOccurence()){    
+			    			 temp.setValues(aList.get(j-1).getWord(), aList.get(j-1).getOccurence());   
+			    			 aList.get(j-1).setValues(aList.get(j).getWord(),aList.get(j).getOccurence());  
+			    			 aList.get(j).setValues(temp.getWord(), temp.getOccurence());
+			    		 }
+			    		 
 			}
-		}
-		
-			}
-			for (ordTæller ordTæller : aList) {
-				System.out.println(ordTæller.getWord() + "Er set i teksten: " + ordTæller.getOccurence() + " gange");
-				
-			}
+	}
+			     //Her udprintes 
+			     float første = aList.get(0).getOccurence();
+			     float anden = aList.get(1).getOccurence();
+			     float tredje = aList.get(2).getOccurence();
+			     float fjerde = aList.get(3).getOccurence();
+			    		 
+					System.out.println("\"" + aList.get(0).getWord() + "\"" + " er det mest skrevne ord i teksten, og er blevet skrevet " + aList.get(0).getOccurence() + " gange");
+					System.out.println("\"" + aList.get(1).getWord() + "\"" + " er det næst mest skrevne ord, med " + aList.get(1).getOccurence() + " gange set i teksten, dette er " + anden/første + " gange af " + "\"" + aList.get(0).getWord()+ "\"");
+					System.out.println("\"" + aList.get(2).getWord() + "\"" + " er det tredje mest skrevne ord, med " + aList.get(2).getOccurence() + " gange set i teksten, dette er " + tredje/første + " gange af " +"\"" + aList.get(0).getWord()+ "\"");
+					System.out.println("\"" + aList.get(3).getWord() + "\"" + " er det fjerde mest skrevne ord, med " + aList.get(3).getOccurence() + " gange set i teksten, dette er " + fjerde/første + " gange af " + "\"" + aList.get(0).getWord()+ "\"");
+			     
 	}
 	public static void writeToFile(String s, String a) {
 
 		try {
-			Writer writer = new OutputStreamWriter(new FileOutputStream("TheEnhanced" + a + ".rtf"), "UTF-8");
+			Writer writer = new OutputStreamWriter(new FileOutputStream("TheEnhanced" + a + ".rtf"), "UTF-16");
 			BufferedWriter fout = new BufferedWriter(writer);
 			fout.write(s);
 			fout.newLine();
@@ -152,9 +170,9 @@ public class FileScanner {
 	}
 
 	public static void main(String[] args) {
-		String input = readFromFile("UglyDuckling");
+		String input = readFromFile("Shakespeare");
 		System.out.println(format(input));
-		writeToFile(format(input),"UglyDuckling");
+		writeToFile(format(input),"Shakespeare");
 		zipf(input);
 
 	}
