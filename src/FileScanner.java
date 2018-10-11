@@ -13,7 +13,7 @@ import java.util.*;
 
 public class FileScanner {
 		
-	public static String findAndReplace (String a, String s, String[] k) {
+	public static String findAndReplaceWord (String a, String s, String[] k) {
 		if(a.toLowerCase().contains(s)) {
 			String[] b = a.split(" ");
 			a="";
@@ -55,9 +55,13 @@ public class FileScanner {
 		}
 		return a;
 	}
+	
 	public static String format(String s) {
 		String[] meget = {"hella","huita","über","extremo","mega"};
-		String[] rap = {"Bing", "Bong", "Skrrrt","skippity","pop pop","boom"};
+		String[] rap = {"bing", "bong", "skrrrt","skippity","pop pop","boom"};
+		String[] vand = {"pengene", "bunkevis af heroin","bajer"};
+		String[] bedrøvet = {"suicidal","depressed","meget meget trist"};
+
 		
 		String[] a = s.split("(?<=\\.)");
 		String output="";
@@ -65,9 +69,11 @@ public class FileScanner {
 			 if(a[i].charAt(0)==' ') {
 				a[i]=a[i].substring(1)+"\n";
 			}
-			a[i]=findAndReplace(a[i],"meget", meget);
-			a[i]=findAndReplace(a[i],"rap",rap);
-				
+			a[i]=findAndReplaceWord(a[i],"meget", meget);
+			a[i]=findAndReplaceWord(a[i],"rap",rap);
+			a[i]=findAndReplaceWord(a[i],"vand",vand);
+			a[i]=findAndReplaceWord(a[i],"bedrøvet",bedrøvet);
+			
 			
 			
 			output += a[i] + "\n";
@@ -101,7 +107,8 @@ public class FileScanner {
 			for (int i = 0; i < sArr.length; i++) {
 				//Her gøres alle ord i sætningen til kun ordet, uden ekstra symboler
 					sArr[i]=sArr[i].toLowerCase();
-					if(sArr[i].matches("\\pL+")){			
+					if(sArr[i].matches("\\pL+")){	
+						//Her laves de første ordTællere
 						if(aList.size()==0) {
 							aList.add(new ordTæller(sArr[i],1));
 						}
@@ -159,7 +166,7 @@ public class FileScanner {
 	public static void writeToFile(String s, String a) {
 
 		try {
-			Writer writer = new OutputStreamWriter(new FileOutputStream("TheEnhanced" + a + ".rtf"), "UTF-16");
+			Writer writer = new OutputStreamWriter(new FileOutputStream("TheEnhanced" + a + ".rtf"), "ISO-8859-1");
 			BufferedWriter fout = new BufferedWriter(writer);
 			fout.write(s);
 			fout.newLine();
@@ -170,10 +177,12 @@ public class FileScanner {
 	}
 
 	public static void main(String[] args) {
-		String input = readFromFile("Shakespeare");
+		String fil = "UglyDuckling";
+		String input = readFromFile(fil);
 		System.out.println(format(input));
-		writeToFile(format(input),"Shakespeare");
+		writeToFile(format(input),fil);
 		zipf(input);
+		//System.out.println(findAndReplaceSentence(input,"String", test));
 
 	}
 }
