@@ -27,6 +27,7 @@ public class FileScanner {
 				sluttal=1;
 				starttal=0;
 					if(b[j].toLowerCase().contains(s)) {
+						//Denne del finder starten og slutningen af ordet, så vi kan proppe det på det endelige ord.
 						while (!(b[j].toLowerCase().charAt(starttal)==s.charAt(0))) {
 							
 							start=b[j].substring(0,starttal+1);
@@ -39,13 +40,13 @@ public class FileScanner {
 						}
 								
 							
-						
+						//Denne del cutter alt unødvendigt af vores ord, og efterlader kun et stykke der er lige langt som det ord vi leder efter, ved et bogstav der ens ved startbogstavet af det ord vi leder efter
 						for (int i = 0; i < b[j].length(); i++) {
 							if(b[j].toLowerCase().charAt(i)==s.charAt(0)) {
 								b[j]=b[j].substring(i,s.length()+i);
 							}
 						}
-						
+						// Her byttes vores oprindelige ord, ud med et tilfældigt ord fra vores array, og tilføjes dens oprindelige start og slut.
 						if(b[j].toLowerCase().equals(s)) {
 							b[j] = start+k[(int) (Math.random() * k.length)]+slut;
 						}
